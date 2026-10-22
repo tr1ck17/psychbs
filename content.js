@@ -30,10 +30,10 @@ window.CONTENT = {
   /* ------------------------------------------------------------------ */
   /* 2. THE KÜBLER-ROSS MODEL                                            */
   /* ------------------------------------------------------------------ */
+  kublerUrl: "https://en.wikipedia.org/wiki/Five_stages_of_grief",
   model: {
     eyebrow: "The model",
     heading: "The Kübler-Ross Model",
-    kublerUrl: "https://en.wikipedia.org/wiki/Five_stages_of_grief",
     paragraphs: [
       // VERIFY: publication year and title of On Death and Dying (1969). [CITATION]
       `In 1969, the psychiatrist <a href="${kublerUrl}" style="text-decoration: underline;" target="_blank">Elisabeth Kübler-Ross</a> published On Death and Dying [CITATION].`,
