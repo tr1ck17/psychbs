@@ -30,13 +30,12 @@ window.CONTENT = {
   /* ------------------------------------------------------------------ */
   /* 2. THE KÜBLER-ROSS MODEL                                            */
   /* ------------------------------------------------------------------ */
-  kublerUrl: "https://en.wikipedia.org/wiki/Five_stages_of_grief",
   model: {
     eyebrow: "The model",
     heading: "The Kübler-Ross Model",
     paragraphs: [
       // VERIFY: publication year and title of On Death and Dying (1969). [CITATION]
-      `In 1969, the psychiatrist <a href="${kublerUrl}" style="text-decoration: underline;" target="_blank">Elisabeth Kübler-Ross</a> published On Death and Dying [CITATION].`,
+      `In 1969, the psychiatrist Elisabeth Kübler-Ross published [On Death and Dying](https://www.ekrfoundation.org/change-curve/).`,
       // VERIFY: the stages were drawn from her work with people facing terminal illness, not bereaved survivors. [CITATION]
       "In it, she described five responses she observed in people who were facing their own terminal illness: denial, anger, bargaining, depression, and acceptance.",
       // VERIFY: the stages were later widely applied to bereavement. [CITATION]

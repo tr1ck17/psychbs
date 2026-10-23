@@ -739,3 +739,15 @@ body.exercise-live.in-exercise .sidebar {
   .ghost { animation: none; }
   .msg p, .box-items li, .actions .button { animation: none; }
 }
+
+a.cite {
+  color: inherit;
+  text-decoration: underline;
+  text-decoration-color: var(--fg-faint);
+  text-underline-offset: 0.2em;
+}
+a.cite:hover,
+a.cite:focus-visible {
+  text-decoration-color: var(--fg);
+}
+

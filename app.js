@@ -28,6 +28,24 @@
     return node;
   }
 
+  // turns [words](https://url) into underlined link; everything else says plain text
+  function appendWithLinks(node, text) {
+    const pattern = /\[([^\]]+)\]\((https?:\/\/[^)\s]+)\)/g;
+    let last = 0;
+    for (const m of text.matchAll(pattern)) {
+      node.append(text.slice(last, m.index));
+      const a = document.createElement('a');
+      a.className = 'cite';
+      a.href = m[2];
+      a.target = '_blank';
+      a.rel = 'noopener noreferrer';
+      a.textContent = m[1];
+      node.append(a);
+      last = m.index + m[0].length;
+    }
+    node.append(text.slice(last));
+  }
+
   function fade(node, delaySeconds) {
     node.classList.add('fade');
     if (delaySeconds) node.style.setProperty('--d', delaySeconds + 's');
