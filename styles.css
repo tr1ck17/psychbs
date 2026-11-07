@@ -485,7 +485,7 @@ body.exercise-live.in-exercise .sidebar {
 .crack.on { opacity: 1; animation: crack-draw 1.4s var(--ease) forwards; }
 @keyframes crack-draw { to { stroke-dashoffset: 0; } }
 
-/* Phase D: rules loosen, boxes overflow and distort */
+/* Phase D: acceptance overflows and distorts; passed stages stay closed */
 .sidebar.loosened .box {
   overflow: visible;
   transform:
@@ -495,7 +495,6 @@ body.exercise-live.in-exercise .sidebar {
   filter: blur(calc(var(--warp) * 0.07px));
 }
 .sidebar.loosened .box-items { overflow: visible; }
-.sidebar.loosened .box.closed { opacity: 0.86; }
 
 /* Collapse: fragments separate and the sidebar fades out */
 .sidebar.collapsing {
@@ -742,7 +741,7 @@ body.exercise-live.in-exercise .sidebar {
   .crack.on { animation: none; opacity: 0.8; }
 
   /* Distortion is expressed as flickering opacity instead */
-  .sidebar.loosened .box { opacity: calc(0.9 - var(--warp) * 0.04); }
+  .sidebar.loosened .box:not(.closed) { opacity: calc(0.9 - var(--warp) * 0.04); }
 
   .ghost { animation: none; }
   .msg p, .box-items li, .actions .button { animation: none; }

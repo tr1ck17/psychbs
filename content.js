@@ -120,8 +120,8 @@ window.CONTENT = {
       { text: "A holiday comes. Their chair is empty, and you can't stop crying.", short: "the empty chair" }
     ],
 
-    // PHASE D: collapse. Rules loosen; everything is accepted.
-    // "lean" is where the card drifts if it places itself (optional).
+    // PHASE D: collapse. Cards come faster, but the model still only
+    // accepts ACCEPTANCE (or the user leaves them unplaced).
     userPlacesInD: 3,
     phaseD: [
       { text: "A memory, out of nowhere.", label: "memory" },
@@ -130,20 +130,20 @@ window.CONTENT = {
       { text: "Guilt.", label: "guilt" },
       { text: "Longing.", label: "longing" },
       { text: "Happiness, and you let yourself feel it.", label: "happiness" },
-      { text: "Sadness, again.", label: "sadness", lean: 3 },
-      { text: "Anger, again.", label: "anger", lean: 1 },
-      { text: "Disbelief, again.", label: "disbelief", lean: 0 },
-      { text: "If only, again.", label: "if only", lean: 2 }
+      { text: "Sadness, again.", label: "sadness" },
+      { text: "Anger, again.", label: "anger" },
+      { text: "Disbelief, again.", label: "disbelief" },
+      { text: "If only, again.", label: "if only" }
     ],
-    // Extra repeats that flood in at the end, stacking duplicates.
+    // Extra repeats that flood in at the end, all piling into ACCEPTANCE.
     phaseDEchoes: [
-      { text: "Anger.", label: "anger", lean: 1 },
-      { text: "Anger.", label: "anger", lean: 1 },
-      { text: "Anger.", label: "anger", lean: 1 },
-      { text: "Sadness.", label: "sadness", lean: 3 },
-      { text: "Sadness.", label: "sadness", lean: 3 },
-      { text: "If only.", label: "if only", lean: 2 },
-      { text: "It isn't real.", label: "disbelief", lean: 0 },
+      { text: "Anger.", label: "anger" },
+      { text: "Anger.", label: "anger" },
+      { text: "Anger.", label: "anger" },
+      { text: "Sadness.", label: "sadness" },
+      { text: "Sadness.", label: "sadness" },
+      { text: "If only.", label: "if only" },
+      { text: "It isn't real.", label: "disbelief" },
       { text: "Their laugh, suddenly.", label: "memory" },
       { text: "Missing them.", label: "longing" },
       { text: "Love.", label: "love" },

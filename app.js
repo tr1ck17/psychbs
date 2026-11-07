@@ -271,12 +271,13 @@
   /* Phases: idle -> A -> B -> interlude -> C -> D -> flood ->         */
   /*         collapse -> done                                          */
   /*                                                                   */
-  /* Placement rule (A, B, C): the model's current stage is the later  */
-  /* of the furthest stage used so far and the model's own floor. A    */
-  /* card may stay in the current stage or step to the next one: never */
-  /* back, never skipping ahead. After the interlude the floor is      */
-  /* ACCEPTANCE, so Phase C cards are only accepted there, or left     */
-  /* outside the model. Phase D accepts everything.                    */
+  /* Placement rule (every phase): the model's current stage is the    */
+  /* later of the furthest stage used so far and the model's own       */
+  /* floor. A card may stay in the current stage or step to the next   */
+  /* one: never back, never skipping ahead. After the interlude the    */
+  /* floor is ACCEPTANCE, so from then on (C, D, and the flood) cards  */
+  /* only go into ACCEPTANCE, or the user leaves them outside the      */
+  /* model.                                                            */
   /* ---------------------------------------------------------------- */
   const S = {
     phase: 'idle',
@@ -292,7 +293,7 @@
     floor: -1,        // stage the model itself has advanced to
     crackStarted: false,
     fractures: 0,
-    dPlaced: 0,
+    dHandled: 0,      // Phase D cards placed or left unplaced by the user
     fragments: null
   };
 
@@ -381,18 +382,12 @@
     if (S.selected) {
       say(M.choose);
       setDrawer(true);
-      if (viaKeyboard) {
-        const target = S.phase === 'D' ? 0 : Math.max(0, currentStage());
-        ui.boxes[target].focus();
-      }
+      if (viaKeyboard) ui.boxes[Math.max(0, currentStage())].focus();
     }
   }
 
   function attempt(stage) {
     if (!S.card || S.busy) return;
-    const item = S.card;
-    if (item.phase === 'D') return accept(stage);
-
     const cur = currentStage();
     let reason = null;
     if (stage < cur) reason = 'passed';
@@ -424,10 +419,15 @@
     S.cardEl.classList.add('placed');
     await wait(item.phase === 'D' ? 800 : 1700);
     S.busy = false;
+    advance(item);
+  }
 
+  // Once the user has dealt with a few Phase D cards, placed or left, the
+  // flood takes over.
+  function advance(item) {
     if (item.phase === 'D') {
-      S.dPlaced += 1;
-      if (S.dPlaced >= X.userPlacesInD) return flood();
+      S.dHandled += 1;
+      if (S.dHandled >= X.userPlacesInD) return flood();
     }
     nextCard();
   }
@@ -438,9 +438,9 @@
     S.rec.attempts.push({ stage, reason });
     shake(box);
 
-    // Recurring feelings are refused everywhere but acceptance. The user can
+    // At acceptance, every feeling is refused everywhere else. The user can
     // give in and put it there, or leave it outside the model.
-    if (item.phase === 'C') {
+    if (currentStage() === LAST) {
       say(M[reason], M.onlyAcceptance);
       if (!S.crackStarted) {
         // First break: a fine crack across the refused box.
@@ -475,7 +475,7 @@
 
     await wait(2000);
     S.busy = false;
-    nextCard();
+    advance(item);
   }
 
   async function interlude() {
@@ -511,8 +511,8 @@
     updateClosed();
   }
 
-  // After the user has placed a few Phase D cards, the rest arrive faster
-  // than anyone could sort them and place themselves.
+  // After the user has dealt with a few Phase D cards, the rest arrive faster
+  // than anyone could sort them, and the model piles them all into acceptance.
   async function flood() {
     S.phase = 'flood';
     S.busy = true;
@@ -525,8 +525,8 @@
     const stream = shuffle([...rest, ...X.phaseDEchoes.map((e) => ({ ...e, phase: 'D' }))]);
 
     let delay = 620;
+    const stage = LAST;
     for (const item of stream) {
-      const stage = item.lean != null ? item.lean : randInt(0, LAST);
       ui.slot.textContent = '';
       ui.slot.append(el('p', 'ghost', item.text));
       addEntry(stage, item.label, true);
@@ -588,8 +588,7 @@
   }
 
   function updateClosed() {
-    const loose = S.phase === 'D' || S.phase === 'flood' || S.phase === 'collapse';
-    const cur = loose ? -1 : currentStage();
+    const cur = currentStage();
     ui.boxes.forEach((box, i) => {
       box.classList.toggle('closed', i < cur);
       box.classList.toggle('current', i === cur);
