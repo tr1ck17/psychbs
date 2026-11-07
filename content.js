@@ -10,11 +10,6 @@
  */
 
 window.CONTENT = {
-  meta: {
-    pageTitle: "The Knowledge of Death",
-    noscript: "This project needs JavaScript to run."
-  },
-
   stages: ["DENIAL", "ANGER", "BARGAINING", "DEPRESSION", "ACCEPTANCE"],
 
   /* ------------------------------------------------------------------ */
@@ -36,7 +31,7 @@ window.CONTENT = {
     heading: "The Kübler-Ross Model",
     paragraphs: [
       // VERIFY: publication year and title of On Death and Dying (1969).
-      `In 1969, the psychiatrist Elisabeth Kübler-Ross published [On Death and Dying](https://www.ekrfoundation.org/change-curve/).`,
+      `In 1969, the psychiatrist Elisabeth Kübler-Ross published [On Death and Dying](https://archive.org/details/ondeathdying00kubl).`,
       // VERIFY: the stages were drawn from her work with people facing terminal illness, not bereaved survivors.
       "In it, she described five responses she observed in people who were [facing their own terminal illness](https://en.wikipedia.org/wiki/Five_stages_of_grief): denial, anger, bargaining, depression, and acceptance.",
       // VERIFY: the stages were later widely applied to bereavement.
@@ -70,8 +65,8 @@ window.CONTENT = {
       choose: "Choose a stage.",
       recorded: "Recorded.",
       passed: "This stage has already passed.",
-      noPlace: "The model has no place for this here.",
-      cannotFit: "You cannot fit this experience into the model.",
+      notYet: "You have not reached this stage yet.",
+      onlyAcceptance: "The model says this belongs in acceptance now.",
       passedLabel: "passed",
       placedLabel: "placed"
     },
@@ -115,14 +110,14 @@ window.CONTENT = {
     ],
 
     // PHASE C: recurrence. Each card clearly belongs to a stage the model
-    // has already closed. "fits" lists the stages it belongs to.
+    // has already closed, but by now the model only accepts ACCEPTANCE.
     // At least 3 of these are always shown.
     phaseC: [
-      { fits: [0, 3], text: "Months later, a song they loved plays and the loss feels new again.", short: "the song" },
-      { fits: [1], text: "You feel angry again.", short: "angry again" },
-      { fits: [2], text: "On their birthday, you catch yourself thinking: if only I had done something differently.", short: "if only, again" },
-      { fits: [0], text: "You pick up your phone to tell them something, before you remember.", short: "reaching for the phone" },
-      { fits: [3], text: "A holiday comes. Their chair is empty, and you can't stop crying.", short: "the empty chair" }
+      { text: "Months later, a song they loved plays and the loss feels new again.", short: "the song" },
+      { text: "You feel angry again.", short: "angry again" },
+      { text: "On their birthday, you catch yourself thinking: if only I had done something differently.", short: "if only, again" },
+      { text: "You pick up your phone to tell them something, before you remember.", short: "reaching for the phone" },
+      { text: "A holiday comes. Their chair is empty, and you can't stop crying.", short: "the empty chair" }
     ],
 
     // PHASE D: collapse. Rules loosen; everything is accepted.
@@ -236,7 +231,7 @@ window.CONTENT = {
       tried: "Tried",
       reasons: {
         passed: "the stage had already passed",
-        noPlace: "the model had no place for it"
+        notYet: "the stage had not been reached yet"
       },
       // {n} is replaced with a number, {labels} with a list.
       flood: "Then {n} more experiences arrived, faster than they could be sorted: {labels}.",
@@ -289,7 +284,7 @@ window.CONTENT = {
       "You were never supposed to finish the five stages."
     ],
     restartLabel: "Begin again",
-    referencesHeading: "Sources to confirm",
+    referencesHeading: "Sources",
     // VERIFY every entry. APA 7 style; each title links to the source.
     references: [
       "Kübler-Ross, E. (1969). [On death and dying](https://archive.org/details/ondeathdying00kubl). Macmillan.",

@@ -272,10 +272,11 @@
   /*         collapse -> done                                          */
   /*                                                                   */
   /* Placement rule (A, B, C): the model's current stage is the later  */
-  /* of the furthest stage used so far and the model's own floor.      */
-  /* Stages before it are closed. Phase C cards may only go into the   */
-  /* stages they belong to, all of which are closed by then, so they   */
-  /* can never be placed. Phase D accepts everything.                  */
+  /* of the furthest stage used so far and the model's own floor. A    */
+  /* card may stay in the current stage or step to the next one: never */
+  /* back, never skipping ahead. After the interlude the floor is      */
+  /* ACCEPTANCE, so Phase C cards are only accepted there, or left     */
+  /* outside the model. Phase D accepts everything.                    */
   /* ---------------------------------------------------------------- */
   const S = {
     phase: 'idle',
@@ -298,9 +299,9 @@
   const currentStage = () => Math.max(S.maxPlaced, S.floor);
 
   function buildDeck() {
-    // Phase A: 3-4 cards from distinct stages, in forward order.
-    const aStages = pickN([0, 1, 2, 3], randInt(3, 4)).sort((a, b) => a - b);
-    const phaseA = aStages.map((stage) => {
+    // Phase A: one card from each stage before acceptance, in forward order,
+    // so stepping forward one stage at a time always fits.
+    const phaseA = [0, 1, 2, 3].map((stage) => {
       const pool = X.phaseA.filter((c) => c.stage === stage);
       return { ...pool[randInt(0, pool.length - 1)], phase: 'A' };
     });
@@ -395,7 +396,7 @@
     const cur = currentStage();
     let reason = null;
     if (stage < cur) reason = 'passed';
-    else if (item.phase === 'C' && !item.fits.includes(stage)) reason = 'noPlace';
+    else if (stage > cur + 1) reason = 'notYet';
 
     if (reason) refuse(stage, reason);
     else accept(stage);
@@ -407,6 +408,7 @@
     const box = ui.boxes[stage];
     S.rec.stage = stage;
     S.card = null;
+    ui.actions.textContent = '';
 
     addEntry(stage, item.phase === 'D' ? item.label : (item.short || item.text), item.phase === 'D');
     box.classList.add('filled');
@@ -436,10 +438,10 @@
     S.rec.attempts.push({ stage, reason });
     shake(box);
 
-    const noValidOption = item.phase === 'C' && item.fits.every((f) => f < currentStage());
-
-    if (noValidOption) {
-      say(M[reason], M.cannotFit);
+    // Recurring feelings are refused everywhere but acceptance. The user can
+    // give in and put it there, or leave it outside the model.
+    if (item.phase === 'C') {
+      say(M[reason], M.onlyAcceptance);
       if (!S.crackStarted) {
         // First break: a fine crack across the refused box.
         S.crackStarted = true;
@@ -452,11 +454,6 @@
         leave.type = 'button';
         leave.addEventListener('click', release);
         ui.actions.append(leave);
-      }
-      // The card cannot be placed. After a few tries it is let go.
-      if (S.rec.attempts.length >= 3 && !S.rec.releasing) {
-        S.rec.releasing = true;
-        setTimeout(release, 1600);
       }
     } else {
       say(M[reason]);
@@ -990,7 +987,6 @@
   /* ---------------------------------------------------------------- */
   /* Boot                                                              */
   /* ---------------------------------------------------------------- */
-  document.title = C.meta.pageTitle;
   renderOpening();
   renderModel();
   renderExercise();
