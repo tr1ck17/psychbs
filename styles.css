@@ -113,6 +113,14 @@ button {
   align-self: flex-start;
 }
 .button:hover { border-color: var(--fg); box-shadow: var(--glow-soft); }
+/* .button's transition would otherwise replace .fade's, dropping the delay and slide */
+.button.fade {
+  transition:
+    opacity var(--slow) var(--ease) var(--d, 0s),
+    transform var(--slow) var(--ease) var(--d, 0s),
+    border-color 0.6s,
+    box-shadow 0.6s;
+}
 
 /* ------------------------------------------------------------------ */
 /* 1. Opening                                                          */

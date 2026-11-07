@@ -650,8 +650,10 @@
   }
 
   // Keyboard shortcuts: 1-5 place the current card, Escape deselects.
+  // Only while the exercise is on screen, so a card is never placed unseen.
   document.addEventListener('keydown', (e) => {
     if (!S.card || S.busy || e.altKey || e.ctrlKey || e.metaKey) return;
+    if (!document.body.classList.contains('in-exercise')) return;
     const n = parseInt(e.key, 10);
     if (n >= 1 && n <= STAGES.length) {
       e.preventDefault();
